@@ -2,6 +2,7 @@ from typing import Dict
 
 from rest_framework import serializers
 
+from core.apps.restaurant.config import Roles_Employee
 from core.apps.restaurant.models.restaurant import Restaurant
 
 
@@ -37,4 +38,23 @@ class RestaurantMenuCreateSerializer(serializers.Serializer):
             "morning": self.validated_data.get("morning"),
             "afternoon": self.validated_data.get("afternoon"),
             "evening": self.validated_data.get("evening"),
+        }
+
+
+class CreateEmployeeSerializer(serializers.Serializer):
+    first_name = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True)
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    restaurant = serializers.CharField(write_only=True)
+    role = serializers.ChoiceField(choices=Roles_Employee)
+
+    def to_entity(self) -> Dict:
+        return {
+            "first_name": self.validated_data.get("first_name"),
+            "last_name": self.validated_data.get("last_name"),
+            "username": self.validated_data.get("username"),
+            "password": self.validated_data.get("password"),
+            "restaurant": self.validated_data.get("restaurant"),
+            "role": self.validated_data.get("role"),
         }

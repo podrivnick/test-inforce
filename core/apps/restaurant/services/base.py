@@ -24,3 +24,10 @@ class BaseCommandRestaurantMenuService(ABC):
     @abstractmethod
     def creation_restaurant_menu(self):
         raise NotImplementedError()
+
+
+@dataclass(eq=False)
+class BaseCommandUploadEmployyService(ABC):
+    @abstractmethod
+    def create_employy(self):
+        raise NotImplementedError()

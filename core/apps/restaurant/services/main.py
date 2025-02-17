@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 
+from core.apps.common.dependencies.user_model import User
 from core.apps.restaurant.models.restaurant import (
+    Employee,
     Restaurant,
     RestaurantMenu,
 )
 from core.apps.restaurant.services.base import (
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
+    BaseCommandUploadEmployyService,
     BaseQueryRestaurantService,
 )
 from core.apps.restaurant.use_cases.main import (
@@ -52,4 +55,19 @@ class CommandRestaurantMenuService(BaseCommandRestaurantMenuService):
             morning=restaurant_data["morning"],
             afternoon=restaurant_data["afternoon"],
             evening=restaurant_data["evening"],
+        )
+
+
+@dataclass(eq=False)
+class CommandUploadEmployyService(BaseCommandUploadEmployyService):
+    def create_employy(
+        self,
+        user: User,
+        restaurant: Restaurant,
+        role: str,
+    ) -> None:
+        Employee.objects.create(
+            user=user,
+            restaurant=restaurant[0],
+            role=role,
         )

@@ -7,6 +7,7 @@ from drf_spectacular.views import (
 )
 
 from core.api.v1.restaurant.handlers import (
+    CreateEmployeeAPI,
     RestauranCreationAPI,
     RestauranUploadMenuAPI,
 )
@@ -20,7 +21,7 @@ urlpatterns = [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path(
-        "create_restauran/",
+        "create_restaurant/",
         RestauranCreationAPI.as_view(),
         name="restauran-creation",
     ),
@@ -28,5 +29,10 @@ urlpatterns = [
         "upload_menu_restaurant/",
         RestauranUploadMenuAPI.as_view(),
         name="restauran-menu",
+    ),
+    path(
+        "create_employy/",
+        CreateEmployeeAPI.as_view(),
+        name="create-employy",
     ),
 ]

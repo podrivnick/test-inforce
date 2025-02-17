@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from core.apps.common.dependencies.user_model import User
+from core.apps.restaurant.use_cases.main import CreationEmployyUseCaseSchema
 from core.apps.users.services.base import (
     BaseCommandUserService,
     BaseQueryUserService,
@@ -24,12 +25,14 @@ class QueryUserService(BaseQueryUserService):
 class CommandUserService(BaseCommandUserService):
     def registration_user(
         self,
-        user_data: RegistrationUserUseCaseSchema,
+        user_data: RegistrationUserUseCaseSchema | CreationEmployyUseCaseSchema,
     ):
-        User.objects.create_user(
+        user = User.objects.create_user(
             username=user_data["username"],
             password=user_data["password"],
             first_name=user_data["first_name"],
             last_name=user_data["last_name"],
             role=user_data["role"],
         )
+
+        return user

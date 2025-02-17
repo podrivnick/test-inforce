@@ -9,14 +9,17 @@ import punq
 from core.apps.restaurant.services.base import (
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
+    BaseCommandUploadEmployyService,
     BaseQueryRestaurantService,
 )
 from core.apps.restaurant.services.main import (
     CommandRestaurantMenuService,
     CommandRestaurantService,
+    CommandUploadEmployyService,
     QueryRestaurantService,
 )
 from core.apps.restaurant.use_cases.main import (
+    CreationEmployyUseCase,
     CreationRestaurantMenuUseCase,
     CreationRestaurantUserUseCase,
 )
@@ -48,10 +51,12 @@ def _initialize_container() -> punq.Container:
     container.register(BaseQueryRestaurantService, QueryRestaurantService)
     container.register(BaseCommandRestaurantService, CommandRestaurantService)
     container.register(BaseCommandRestaurantMenuService, CommandRestaurantMenuService)
+    container.register(BaseCommandUploadEmployyService, CommandUploadEmployyService)
 
     # init use cases
     container.register(RegistrationUserUseCase)
     container.register(CreationRestaurantUserUseCase)
     container.register(CreationRestaurantMenuUseCase)
+    container.register(CreationEmployyUseCase)
 
     return container

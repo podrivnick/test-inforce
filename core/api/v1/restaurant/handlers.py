@@ -13,10 +13,12 @@ from core.apps.common.exception import (
     ServiceException,
 )
 from core.apps.restaurant.serializers.main import (
+    CreateEmployeeSerializer,
     RestaurantMenuCreateSerializer,
     RestaurantTitleSerializer,
 )
 from core.apps.restaurant.use_cases.main import (
+    CreationEmployyUseCase,
     CreationRestaurantMenuUseCase,
     CreationRestaurantUserUseCase,
 )
@@ -73,6 +75,42 @@ class RestauranUploadMenuAPI(generics.CreateAPIView):
         try:
             result = use_case.execute(
                 restaurant_menu_data_schema=serializer.to_entity(),
+            )
+
+            return Response(
+                {
+                    "data": result,
+                    "message": "Created successfully",
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        except ServiceException as error:
+            logger: Logger = container.resolve(Logger)
+            logger.error(
+                msg="Error: Can't Create Restaurant",
+                extra={"error_meta": orjson.dumps(error).decode()},
+            )
+
+            raise CustomExceptionForApps(
+                detail=error.message,
+                status_code=422,
+                extra_data={"some_field": "some_value"},
+            )
+
+
+class CreateEmployeeAPI(generics.CreateAPIView):
+    serializer_class = CreateEmployeeSerializer
+    permission_classes = [IsOwner]
+
+    def perform_create(self, serializer) -> Response:
+        container = get_container()
+        use_case: CreationEmployyUseCase = container.resolve(
+            CreationEmployyUseCase,
+        )
+
+        try:
+            result = use_case.execute(
+                data_user_employy=serializer.to_entity(),
             )
 
             return Response(
