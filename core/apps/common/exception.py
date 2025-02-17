@@ -15,7 +15,7 @@ class ServiceException(Exception):
         return SERVICE_ERROR
 
 
-class CustomExceptionForUserApp(Exception):
+class CustomExceptionForApps(Exception):
     status_code = 422
     default_detail = USE_CASE_EXCEPTION_USER
     default_code = "invalid"

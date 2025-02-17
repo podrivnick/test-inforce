@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from core.apps.restaurant.models.restaurant import (
+    Employee,
     Restaurant,
     RestaurantMenu,
 )
@@ -72,5 +73,26 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
 
 
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "restaurant",
+        "role",
+    )
+    list_filter = ("restaurant", "role")
+    search_fields = ("user__username", "restaurant__title")
+    ordering = ("restaurant", "role")
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("user", "restaurant", "role"),
+            },
+        ),
+    )
+
+
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(RestaurantMenu, RestaurantMenuAdmin)
+admin.site.register(Employee, EmployeeAdmin)

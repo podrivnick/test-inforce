@@ -37,3 +37,24 @@ class RestaurantMenu(TimeBaseModel):
         db_table = "menu"
         verbose_name = "Меню"
         verbose_name_plural = "Меню"
+
+
+class Employee(TimeBaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(
+        Restaurant,
+        related_name="employees",
+        on_delete=models.CASCADE,
+    )
+    role = models.CharField(
+        max_length=50,
+        choices=[("chef", "Chef"), ("waiter", "Waiter")],
+    )
+
+    def __str__(self):
+        return f"{self.user.username} ({self.role})"
+
+    class Meta:
+        db_table = "employee"
+        verbose_name = "Співробітники"
+        verbose_name_plural = "Співробітники"

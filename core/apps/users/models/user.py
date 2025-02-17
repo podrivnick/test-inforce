@@ -29,15 +29,5 @@ class User(AbstractUser):
         verbose_name = "Користувач"
         verbose_name_plural = "Користувачі"
 
-    # def to_entity(
-    #     self,
-    # ) -> UserSimpleEntity:
-    #     return UserSimpleEntity(
-    #         username=self.username,
-    #         first_name=self.first_name,
-    #         last_name=self.last_name,
-    #         phone=self.phone,
-    #     )
-
     def __str__(self):
         return self.username

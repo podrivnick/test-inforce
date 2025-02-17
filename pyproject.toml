@@ -27,6 +27,7 @@ celery = "^5.4.0"
 redis = "^5.2.1"
 psycopg2 = "^2.9.10"
 django-filter = "^25.1"
+djangorestframework-simplejwt = "^5.4.0"
 
 
 [tool.poetry.group.dev.dependencies]

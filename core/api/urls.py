@@ -6,6 +6,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from core.api.v1.restaurant.handlers import RestauranCreationAPI
 from core.api.v1.users.handlers import UserRegistrationAPI
 
 
@@ -15,4 +16,9 @@ urlpatterns = [
     path("registration/", UserRegistrationAPI.as_view(), name="user-registration"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path(
+        "create_restauran/",
+        RestauranCreationAPI.as_view(),
+        name="restauran-creation",
+    ),
 ]
