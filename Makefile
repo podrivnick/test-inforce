@@ -9,7 +9,7 @@ APP_CONTAINER = inforce-app
 DB_CONTAINER = ppostgres
 INTO_BASH = /bin/bash
 INTO_BASH_FOR_COMMANDS = /bin/bash -c
-RUN_COLLECTSTATIC = python manage.py collectstatic --noinput
+RUN_COLLECTSTATIC = python manage.py collectstatic
 RUN_CREATESUPREUSER = python manage.py createsuperuser
 
 
