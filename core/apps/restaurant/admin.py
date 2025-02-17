@@ -12,12 +12,11 @@ class RestaurantAdmin(admin.ModelAdmin):
         "user",
         "created_at",
         "updated_at",
-    )  # Поля, которые отображаются в списке
-    list_filter = ("user", "created_at")  # Фильтрация по этим полям
-    search_fields = ("title",)  # Поиск по названию ресторана
-    ordering = ("title",)  # Сортировка по названию ресторана
+    )
+    list_filter = ("user", "created_at")
+    search_fields = ("title",)
+    ordering = ("title",)
 
-    # Если нужно, можно настроить поля для редактирования
     fieldsets = (
         (
             None,
@@ -34,6 +33,8 @@ class RestaurantAdmin(admin.ModelAdmin):
         ),
     )
 
+    readonly_fields = ("created_at", "updated_at")
+
 
 class RestaurantMenuAdmin(admin.ModelAdmin):
     list_display = (
@@ -44,15 +45,14 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
         "evening",
         "created_at",
         "updated_at",
-    )  # Поля, которые отображаются в списке
-    list_filter = ("restaurant", "weekday")  # Фильтрация по ресторану и дню недели
+    )
+    list_filter = ("restaurant", "weekday")
     search_fields = (
         "restaurant__title",
         "weekday",
-    )  # Поиск по названию ресторана и дню недели
-    ordering = ("restaurant", "weekday")  # Сортировка по ресторану и дню недели
+    )
+    ordering = ("restaurant", "weekday")
 
-    # Настройка полей для редактирования
     fieldsets = (
         (
             None,
@@ -69,7 +69,8 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
         ),
     )
 
+    readonly_fields = ("created_at", "updated_at")
 
-# Регистрация моделей в админке
+
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(RestaurantMenu, RestaurantMenuAdmin)
