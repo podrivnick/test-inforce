@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     expose:
       - 8000
-    command: ["poetry", "run", "gunicorn", "--workers", "3", "core.project.wsgi:application", "--bind", "0.0.0.0:8000"]
+    command: ["poetry", "run", "gunicorn", "--workers", "1", "core.project.wsgi:application", "--bind", "0.0.0.0:8000"]
     depends_on:
       - postgres
     volumes:

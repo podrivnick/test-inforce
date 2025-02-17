@@ -49,9 +49,10 @@ INSTALLED_APPS = [
     # first party
     "rest_framework",
     "django_filters",
+    "drf_spectacular",
     "core.apps.restaurant.apps.RestaurantConfig",
     "core.apps.users.apps.UsersConfig",
-    # "core.apps.common.apps.CommonConfig",
+    "core.apps.common.apps.CommonConfig",
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 1,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -138,10 +151,22 @@ USE_I18N = True
 
 USE_TZ = True
 
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
-STATIC_URL = "staticfiles/"
 
-STATIC_ROOT = "staticfiles"
+STATIC_URL = "/static/"
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -150,4 +175,4 @@ STATIC_ROOT = "staticfiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-# AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "users.User"

@@ -1,14 +1,14 @@
 from django.db import models
 
 from core.apps.common.models import TimeBaseModel
-from core.apps.users.models.users import User
+from core.apps.users.models.user import User
 
 
 class Restaurant(TimeBaseModel):
     title = models.CharField(max_length=50, verbose_name="Назва Ресторану", null=False)
     user = models.ForeignKey(
         to=User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.PROTECT,
         null=False,
         verbose_name="Власник",
         blank=False,
@@ -23,7 +23,7 @@ class Restaurant(TimeBaseModel):
 class RestaurantMenu(TimeBaseModel):
     restaurant = models.ForeignKey(
         to=Restaurant,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.PROTECT,
         null=False,
         verbose_name="Ресторан",
         blank=False,
