@@ -7,14 +7,19 @@ from logging import (
 import punq
 
 from core.apps.restaurant.services.base import (
+    BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
     BaseQueryRestaurantService,
 )
 from core.apps.restaurant.services.main import (
+    CommandRestaurantMenuService,
     CommandRestaurantService,
     QueryRestaurantService,
 )
-from core.apps.restaurant.use_cases.main import CreationRestaurantUserUseCase
+from core.apps.restaurant.use_cases.main import (
+    CreationRestaurantMenuUseCase,
+    CreationRestaurantUserUseCase,
+)
 from core.apps.users.services.base import (
     BaseCommandUserService,
     BaseQueryUserService,
@@ -42,9 +47,11 @@ def _initialize_container() -> punq.Container:
     container.register(BaseCommandUserService, CommandUserService)
     container.register(BaseQueryRestaurantService, QueryRestaurantService)
     container.register(BaseCommandRestaurantService, CommandRestaurantService)
+    container.register(BaseCommandRestaurantMenuService, CommandRestaurantMenuService)
 
     # init use cases
     container.register(RegistrationUserUseCase)
     container.register(CreationRestaurantUserUseCase)
+    container.register(CreationRestaurantMenuUseCase)
 
     return container

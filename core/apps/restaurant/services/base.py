@@ -17,3 +17,10 @@ class BaseCommandRestaurantService(ABC):
     @abstractmethod
     def creation_restaurant(self):
         raise NotImplementedError()
+
+
+@dataclass(eq=False)
+class BaseCommandRestaurantMenuService(ABC):
+    @abstractmethod
+    def creation_restaurant_menu(self):
+        raise NotImplementedError()
