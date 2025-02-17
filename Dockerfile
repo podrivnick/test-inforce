@@ -22,17 +22,17 @@ ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 FROM python:3.12.1-slim-bullseye as dev
 
 
-WORKDIR /boilerplate-django-ninja
+WORKDIR /inforce
 
-COPY --from=builder requirements.dev.txt /boilerplate-django-ninja
+COPY --from=builder requirements.dev.txt /inforce
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends python3-dev \
-                       gcc \
-                       musl-dev \
-                       libpq-dev \
-                       nmap \
-                       netcat && \
+                    gcc \
+                    musl-dev \
+                    libpq-dev \
+                    nmap \
+                    netcat && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -43,6 +43,6 @@ RUN pip install --upgrade --no-cache-dir pip==24.0 \
     && pip install --no-cache-dir -r requirements.dev.txt
 
 
-COPY . /boilerplate-django-ninja/
+COPY . /inforce/
 
 EXPOSE 8000

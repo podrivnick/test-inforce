@@ -46,9 +46,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "django_extensions",
-    "core.apps.telegram_auth.apps.TelegramAuthConfig",
+    # first party
+    "rest_framework",
+    "django_filters",
+    "core.apps.restaurant.apps.RestaurantConfig",
     "core.apps.users.apps.UsersConfig",
-    "core.apps.common.apps.CommonConfig",
+    # "core.apps.common.apps.CommonConfig",
 ]
 
 MIDDLEWARE = [
@@ -147,4 +150,4 @@ STATIC_ROOT = "staticfiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL = "users.User"
+# AUTH_USER_MODEL = "users.User"

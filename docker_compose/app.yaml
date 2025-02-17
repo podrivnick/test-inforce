@@ -1,9 +1,9 @@
 services:
-  app-shop:
+  inforce-app:
     build:
       context: ../../inforce/
       dockerfile: Dockerfile
-    container_name: app-shop
+    container_name: inforce-app
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
@@ -21,21 +21,6 @@ services:
     command: ["poetry", "run", "gunicorn", "--workers", "3", "core.project.wsgi:application", "--bind", "0.0.0.0:8000"]
     depends_on:
       - postgres
-    volumes:
-      - ..:/inforce/
-    networks:
-      - ppostgres.network
-
-  celery-worker:
-    build:
-      context: ../../inforce/
-      dockerfile: Dockerfile
-    container_name: celery-worker
-    command: ["celery", "-A", "tasks", "worker", "--loglevel=info"]
-    depends_on:
-      - redis
-    environment:
-      - PYTHONPATH=../../inforce/
     volumes:
       - ..:/inforce/
     networks:
