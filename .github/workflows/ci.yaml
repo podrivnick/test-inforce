@@ -29,7 +29,6 @@ jobs:
       run: |
           docker-compose -f docker_compose/app.yaml \
                         -f docker_compose/postgres.yaml \
-                        -f docker_compose/backup.yaml \
                         --env-file .env.example up -d
 
     - name: Run Tests
@@ -40,5 +39,4 @@ jobs:
       run: |
           docker-compose -f docker_compose/app.yaml \
                         -f docker_compose/postgres.yaml \
-                        -f docker_compose/backup.yaml \
                         down

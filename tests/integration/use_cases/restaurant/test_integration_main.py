@@ -10,24 +10,13 @@ from typing import (
 
 import pytest
 
+from core.apps.common.exception import ServiceException
+from core.apps.restaurant.exceptions.base import BaseExceptionRestaurant
+from core.apps.restaurant.exceptions.main import RestaurantAlreadyExists
 from core.apps.restaurant.use_cases.main import (
     CreationRestaurantUserUseCase,
     CreationRestaurantUserUseCaseSchema,
 )
-
-
-# Exceptions
-class RestaurantAlreadyExists(Exception):
-    pass
-
-
-class BaseExceptionRestaurant(Exception):
-    def __init__(self, message):
-        self.message = message
-
-
-class ServiceException(Exception):
-    pass
 
 
 # --- Fake Services ---
