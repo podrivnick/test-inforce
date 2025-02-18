@@ -183,7 +183,6 @@ class GetRestaurantMenuUseCase:
                     restaurant=employy[0].restaurant,
                 )
             )
-
         elif data_user_and_weekday.user.role == "Власник":
             restaurant = self.query_filter_restaurant_service.filter_restaurant_owners(
                 user=data_user_and_weekday.user,
@@ -193,13 +192,16 @@ class GetRestaurantMenuUseCase:
                     restaurant=restaurant,
                 )
             )
+        updated_restaurant_menu = list(restaurant_menu)
 
         filtered_restaurant_menu = self.filter_results_restaurant_menu(
-            restaurant_menu=restaurant_menu,
+            restaurant_menu=updated_restaurant_menu,
             weekday=data_user_and_weekday.weekday,
         )
+
         logging.info(f"{filtered_restaurant_menu}!!!!!!!!!!!!!!!!!!!!!")
-        return filtered_restaurant_menu
+
+        return filtered_restaurant_menu[0]
 
     @staticmethod
     def filter_results_restaurant_menu(restaurant_menu, weekday):

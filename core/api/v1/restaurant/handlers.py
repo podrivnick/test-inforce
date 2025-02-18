@@ -164,8 +164,11 @@ class CurrentDayMenuAPI(generics.GenericAPIView):
 
             return Response(
                 {
-                    "data": result,
-                    "message": "Created successfully",
+                    "restaurant": result.restaurant.title,
+                    "weekday": result.weekday,
+                    "morning": result.morning,
+                    "afternoon": result.afternoon,
+                    "evening": result.evening,
                 },
                 status=status.HTTP_201_CREATED,
             )
