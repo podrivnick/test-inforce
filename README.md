@@ -1,4 +1,4 @@
-# Boilerplate Django Ninja
+# Django DRF Project
 
 ### Installation and Running
 
@@ -17,8 +17,8 @@ ___
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/podrivnick/elec-shop.git
-   cd ninja
+   git clone https://github.com/podrivnick/test-inforce
+   cd inforce
    ```
 2. Set up environment variables:
    - Create a `.env` file and fill it according to `.env.example`.
@@ -35,7 +35,6 @@ ___
 ### Specific Commands
 
 * `make storage` - up only storages. you should run your application locally for debugging/developing purposes
-* `postgres_backup` - up postgres container backup, which coping data from main postgres container
 * `make appbash` - enter into application container
 * `make runtest` - run tests for main application
 
@@ -54,6 +53,7 @@ ___
 + **Dependency Injection**: (punq)
 + **Specification Pattern**
 + **Configuration Management** (dotenv)
++ **CQRS**
 
 ## Author
 Author of the project: ***Rybakov Artem***

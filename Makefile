@@ -21,10 +21,6 @@ storage:
 app:
 	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${POSTGRES_BACKUP_FILE} ${ENV_FILE} up -d
 
-.PHONY: postgres_backup
-postgres_backup:
-	${DC} -f ${POSTGRES_BACKUP_FILE} ${ENV_FILE} up -d
-
 .PHONY: app-logs
 app-logs:
 	${LOGS} ${APP_CONTAINER} -f

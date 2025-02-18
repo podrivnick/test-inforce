@@ -11,6 +11,10 @@ class BaseQueryRestaurantService(ABC):
     def filter_restaurant_titles(self):
         raise NotImplementedError()
 
+    @abstractmethod
+    def filter_restaurant_owners(self):
+        raise NotImplementedError()
+
 
 @dataclass(eq=False)
 class BaseCommandRestaurantService(ABC):
@@ -20,9 +24,23 @@ class BaseCommandRestaurantService(ABC):
 
 
 @dataclass(eq=False)
+class BaseQueryRestaurantMenuService(ABC):
+    @abstractmethod
+    def filter_restaurant_menu(self):
+        raise NotImplementedError()
+
+
+@dataclass(eq=False)
 class BaseCommandRestaurantMenuService(ABC):
     @abstractmethod
     def creation_restaurant_menu(self):
+        raise NotImplementedError()
+
+
+@dataclass(eq=False)
+class BaseQueryUploadEmployyService(ABC):
+    @abstractmethod
+    def get_employy(self):
         raise NotImplementedError()
 
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict
 
 from rest_framework import serializers
@@ -61,10 +62,10 @@ class CreateEmployeeSerializer(serializers.Serializer):
         }
 
 
-# class CreateEmployeeSerializer(serializers.Serializer):
-#     restaurant = serializers.CharField(write_only=True)
-
-#     def to_entity(self) -> Dict:
-#         return {
-#             "restaurant": self.validated_data.get("restaurant"),
-#         }
+class CurrentDayMenuSerializer(serializers.Serializer):
+    def to_entity(self) -> Dict:
+        request = self.context.get("request")
+        return {
+            "user": request.user,
+            "weekday": datetime.today().strftime("%A"),
+        }

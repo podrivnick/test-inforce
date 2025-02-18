@@ -1,3 +1,4 @@
+import logging
 from dataclasses import (
     dataclass,
     field,
@@ -11,7 +12,9 @@ from core.apps.restaurant.services.base import (
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
     BaseCommandUploadEmployyService,
+    BaseQueryRestaurantMenuService,
     BaseQueryRestaurantService,
+    BaseQueryUploadEmployyService,
 )
 from core.apps.users.excaptions.base import BaseExceptionUser
 from core.apps.users.excaptions.main import UserAlreadyExists
@@ -156,37 +159,50 @@ class CreationEmployyUseCase:
 
 @dataclass(eq=False)
 class GetRestaurantMenuUseCaseSchema:
-    restaurant: str | None = field(default=None)
+    user: Any | None = field(default=None)
     weekday: str | None = field(default=None)
-    morning: str | None = field(default=None)
-    afternoon: str | None = field(default=None)
-    evening: str | None = field(default=None)
 
 
 @dataclass(eq=False)
 class GetRestaurantMenuUseCase:
+    query_filter_employees_service: BaseQueryUploadEmployyService
+    query_filter_restaurant_menu_service: BaseQueryRestaurantMenuService
     query_filter_restaurant_service: BaseQueryRestaurantService
-    command_creation_restaurant_menu_service: BaseCommandRestaurantMenuService
 
     def execute(
         self,
-        restaurant_menu_data_schema: GetRestaurantMenuUseCaseSchema,
+        data_user_and_weekday: GetRestaurantMenuUseCaseSchema,
     ) -> GetRestaurantMenuUseCaseSchema:
-        is_restaurant_already_exist = self.query_filter_restaurant_service.get(
-            title=restaurant_menu_data_schema["restaurant"],
-        )
-        if not is_restaurant_already_exist:
-            raise ValueError()
-
-        restaurant = list(is_restaurant_already_exist)
-
-        try:
-            self.command_creation_restaurant_menu_service.creation_restaurant_menu(
-                restaurant_data=restaurant_menu_data_schema,
-                restaurant=restaurant,
+        if data_user_and_weekday.user.role == "Працівник":
+            employy = self.query_filter_employees_service.get_employy(
+                user=data_user_and_weekday.user,
             )
-        except BaseExceptionRestaurant as error:
-            print(error.message)
-            raise ServiceException()
+            logging.info(f"{employy.restaurant}!!!!!!!!!!!!!!!!!!!!!")
+            restaurant_menu = (
+                self.query_filter_restaurant_menu_service.filter_restaurant_menu(
+                    restaurant=employy[0].restaurant,
+                )
+            )
 
-        return restaurant_menu_data_schema
+        elif data_user_and_weekday.user.role == "Власник":
+            restaurant = self.query_filter_restaurant_service.filter_restaurant_owners(
+                user=data_user_and_weekday.user,
+            )
+            restaurant_menu = (
+                self.query_filter_restaurant_menu_service.filter_restaurant_menu(
+                    restaurant=restaurant,
+                )
+            )
+
+        filtered_restaurant_menu = self.filter_results_restaurant_menu(
+            restaurant_menu=restaurant_menu,
+            weekday=data_user_and_weekday.weekday,
+        )
+        logging.info(f"{filtered_restaurant_menu}!!!!!!!!!!!!!!!!!!!!!")
+        return filtered_restaurant_menu
+
+    @staticmethod
+    def filter_results_restaurant_menu(restaurant_menu, weekday):
+        filtered_weekday = [e for e in restaurant_menu if e.weekday == weekday]
+
+        return filtered_weekday

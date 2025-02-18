@@ -10,7 +10,9 @@ from core.apps.restaurant.services.base import (
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
     BaseCommandUploadEmployyService,
+    BaseQueryRestaurantMenuService,
     BaseQueryRestaurantService,
+    BaseQueryUploadEmployyService,
 )
 from core.apps.restaurant.use_cases.main import (
     CreationRestaurantMenuUseCaseSchema,
@@ -29,6 +31,15 @@ class QueryRestaurantService(BaseQueryRestaurantService):
         )
         return restaurant
 
+    def filter_restaurant_owners(
+        self,
+        user: User,
+    ):
+        restaurant = Restaurant.objects.filter(
+            user=user,
+        )
+        return restaurant
+
 
 @dataclass(eq=False)
 class CommandRestaurantService(BaseCommandRestaurantService):
@@ -40,6 +51,19 @@ class CommandRestaurantService(BaseCommandRestaurantService):
             title=restaurant_data["title"],
             user=restaurant_data["user"],
         )
+
+
+@dataclass(eq=False)
+class QueryRestaurantMenuService(BaseQueryRestaurantMenuService):
+    def filter_restaurant_menu(
+        self,
+        restaurant: Restaurant,
+    ):
+        res = RestaurantMenu.objects.filter(
+            restaurant=restaurant[0],
+        )
+
+        return res
 
 
 @dataclass(eq=False)
@@ -56,6 +80,19 @@ class CommandRestaurantMenuService(BaseCommandRestaurantMenuService):
             afternoon=restaurant_data["afternoon"],
             evening=restaurant_data["evening"],
         )
+
+
+@dataclass(eq=False)
+class QueryUploadEmployyService(BaseQueryUploadEmployyService):
+    def get_employy(
+        self,
+        user: User,
+    ) -> Employee:
+        employy = Employee.objects.filter(
+            user=user,
+        ).first()
+
+        return employy
 
 
 @dataclass(eq=False)

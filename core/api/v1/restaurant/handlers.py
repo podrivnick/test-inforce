@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import Logger
 
 from rest_framework import (
@@ -15,6 +16,7 @@ from core.apps.common.exception import (
 )
 from core.apps.restaurant.serializers.main import (
     CreateEmployeeSerializer,
+    CurrentDayMenuSerializer,
     RestaurantMenuCreateSerializer,
     RestaurantTitleSerializer,
 )
@@ -22,6 +24,8 @@ from core.apps.restaurant.use_cases.main import (
     CreationEmployyUseCase,
     CreationRestaurantMenuUseCase,
     CreationRestaurantUserUseCase,
+    GetRestaurantMenuUseCase,
+    GetRestaurantMenuUseCaseSchema,
 )
 from core.apps.restaurant.utils.main import IsOwner
 from core.infrastructure.di.main import get_container
@@ -135,19 +139,27 @@ class CreateEmployeeAPI(generics.CreateAPIView):
             )
 
 
-class CurrentDayMenuAPI(generics.CreateAPIView):
-    serializer_class = CreateEmployeeSerializer
+class CurrentDayMenuAPI(generics.GenericAPIView):
+    serializer_class = CurrentDayMenuSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer) -> Response:
+    def get(self, request, *args, **kwargs) -> Response:
         container = get_container()
-        use_case: CreationEmployyUseCase = container.resolve(
-            CreationEmployyUseCase,
+        use_case: GetRestaurantMenuUseCase = container.resolve(
+            GetRestaurantMenuUseCase,
+        )
+
+        user = request.user
+        weekday = datetime.today().strftime("%A")
+
+        schema = GetRestaurantMenuUseCaseSchema(
+            user=user,
+            weekday=weekday,
         )
 
         try:
             result = use_case.execute(
-                data_user_employy=serializer.to_entity(),
+                data_user_and_weekday=schema,
             )
 
             return Response(
