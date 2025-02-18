@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from core.apps.restaurant.config import BASE_EXCEPTION_RESTAURANT
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class BaseExceptionRestaurant(Exception):
     product: int = None
 

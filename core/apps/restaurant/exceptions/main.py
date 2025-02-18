@@ -4,7 +4,7 @@ from core.apps.restaurant.config import RESTAURANT_ALREADY_EXIST_ERROR
 from core.apps.restaurant.exceptions.base import BaseExceptionRestaurant
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class RestaurantAlreadyExists(BaseExceptionRestaurant):
     @property
     def message(self):

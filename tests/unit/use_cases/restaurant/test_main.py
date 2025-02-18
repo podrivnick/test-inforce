@@ -1,4 +1,9 @@
 import pytest
+from tests.unit.fixtures import (  # noqa
+    command_service_mock,
+    query_service_mock,
+    use_case,
+)
 
 from core.apps.common.exception import ServiceException
 from core.apps.restaurant.exceptions.base import BaseExceptionRestaurant

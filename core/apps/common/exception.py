@@ -6,7 +6,7 @@ from core.apps.common.config import (
 )
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class ServiceException(Exception):
     product: int = None
 
