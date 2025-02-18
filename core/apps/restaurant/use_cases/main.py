@@ -43,7 +43,7 @@ class CreationRestaurantUserUseCase:
     ) -> CreationRestaurantUserUseCaseSchema:
         is_restaurant_already_exist = (
             self.query_filter_restaurant_service.filter_restaurant_titles(
-                title=restaurant_data_schema["title"],
+                title=restaurant_data_schema.title,
             )
         )
         if is_restaurant_already_exist:
@@ -80,7 +80,7 @@ class CreationRestaurantMenuUseCase:
     ) -> CreationRestaurantMenuUseCaseSchema:
         is_restaurant_already_exist = (
             self.query_filter_restaurant_service.filter_restaurant_titles(
-                title=restaurant_menu_data_schema["restaurant"],
+                title=restaurant_menu_data_schema.restaurant,
             )
         )
         if not is_restaurant_already_exist:
@@ -124,7 +124,7 @@ class CreationEmployyUseCase:
     ) -> CreationEmployyUseCaseSchema:
         is_restaurant_already_exist = (
             self.query_filter_restaurant_service.filter_restaurant_titles(
-                title=data_user_employy["restaurant"],
+                title=data_user_employy.restaurant,
             )
         )
         if not is_restaurant_already_exist:
@@ -133,7 +133,7 @@ class CreationEmployyUseCase:
         restaurant = list(is_restaurant_already_exist)
 
         is_user_already_exist = self.query_filter_user_service.filter_users(
-            username=data_user_employy["username"],
+            username=data_user_employy.username,
         )
         if is_user_already_exist:
             raise UserAlreadyExists()
@@ -150,7 +150,7 @@ class CreationEmployyUseCase:
             self.command_creation_employy_service.create_employy(
                 user=user,
                 restaurant=restaurant,
-                role=data_user_employy["work_role"],
+                role=data_user_employy.work_role,
             )
         except BaseExceptionRestaurant as error:
             print(error.message)

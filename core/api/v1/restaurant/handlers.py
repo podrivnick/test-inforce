@@ -22,8 +22,11 @@ from core.apps.restaurant.serializers.main import (
 )
 from core.apps.restaurant.use_cases.main import (
     CreationEmployyUseCase,
+    CreationEmployyUseCaseSchema,
     CreationRestaurantMenuUseCase,
+    CreationRestaurantMenuUseCaseSchema,
     CreationRestaurantUserUseCase,
+    CreationRestaurantUserUseCaseSchema,
     GetRestaurantMenuUseCase,
     GetRestaurantMenuUseCaseSchema,
 )
@@ -41,9 +44,11 @@ class RestauranCreationAPI(generics.CreateAPIView):
             CreationRestaurantUserUseCase,
         )
 
+        schema = CreationRestaurantUserUseCaseSchema(**serializer.to_entity())
+
         try:
             result = use_case.execute(
-                restaurant_data_schema=serializer.to_entity(),
+                restaurant_data_schema=schema,
             )
 
             return Response(
@@ -77,9 +82,11 @@ class RestauranUploadMenuAPI(generics.CreateAPIView):
             CreationRestaurantMenuUseCase,
         )
 
+        schema = CreationRestaurantMenuUseCaseSchema(**serializer.to_entity())
+
         try:
             result = use_case.execute(
-                restaurant_menu_data_schema=serializer.to_entity(),
+                restaurant_menu_data_schema=schema,
             )
 
             return Response(
@@ -113,9 +120,11 @@ class CreateEmployeeAPI(generics.CreateAPIView):
             CreationEmployyUseCase,
         )
 
+        schema = CreationEmployyUseCaseSchema(**serializer.to_entity())
+
         try:
             result = use_case.execute(
-                data_user_employy=serializer.to_entity(),
+                data_user_employy=schema,
             )
 
             return Response(

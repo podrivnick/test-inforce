@@ -28,11 +28,11 @@ class CommandUserService(BaseCommandUserService):
         user_data: RegistrationUserUseCaseSchema | CreationEmployyUseCaseSchema,
     ):
         user = User.objects.create_user(
-            username=user_data["username"],
-            password=user_data["password"],
-            first_name=user_data["first_name"],
-            last_name=user_data["last_name"],
-            role=user_data["role"],
+            username=user_data.username,
+            password=user_data.password,
+            first_name=user_data.first_name,
+            last_name=user_data.last_name,
+            role=user_data.role,
         )
 
         return user

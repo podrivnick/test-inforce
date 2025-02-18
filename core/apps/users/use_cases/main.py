@@ -31,7 +31,7 @@ class RegistrationUserUseCase:
         user_data_schema: RegistrationUserUseCaseSchema,
     ) -> RegistrationUserUseCaseSchema:
         is_user_already_exist = self.query_filter_user_service.filter_users(
-            username=user_data_schema["username"],
+            username=user_data_schema.username,
         )
         if is_user_already_exist:
             raise UserAlreadyExists()

@@ -48,8 +48,8 @@ class CommandRestaurantService(BaseCommandRestaurantService):
         restaurant_data: CreationRestaurantUserUseCaseSchema,
     ) -> None:
         Restaurant.objects.create(
-            title=restaurant_data["title"],
-            user=restaurant_data["user"],
+            title=restaurant_data.title,
+            user=restaurant_data.user,
         )
 
 
@@ -75,10 +75,10 @@ class CommandRestaurantMenuService(BaseCommandRestaurantMenuService):
     ) -> None:
         RestaurantMenu.objects.create(
             restaurant=restaurant[0],
-            weekday=restaurant_data["weekday"],
-            morning=restaurant_data["morning"],
-            afternoon=restaurant_data["afternoon"],
-            evening=restaurant_data["evening"],
+            weekday=restaurant_data.weekday,
+            morning=restaurant_data.morning,
+            afternoon=restaurant_data.afternoon,
+            evening=restaurant_data.evening,
         )
 
 

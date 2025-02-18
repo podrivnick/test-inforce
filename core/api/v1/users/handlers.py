@@ -14,7 +14,10 @@ from core.apps.common.exception import (
     ServiceException,
 )
 from core.apps.users.serializers.main import UserSerializer
-from core.apps.users.use_cases.main import RegistrationUserUseCase
+from core.apps.users.use_cases.main import (
+    RegistrationUserUseCase,
+    RegistrationUserUseCaseSchema,
+)
 from core.infrastructure.di.main import get_container
 
 
@@ -26,9 +29,11 @@ class UserRegistrationAPI(generics.CreateAPIView):
         container = get_container()
         use_case: RegistrationUserUseCase = container.resolve(RegistrationUserUseCase)
 
+        schema = RegistrationUserUseCaseSchema(**serializer.to_entity())
+
         try:
             result = use_case.execute(
-                user_data_schema=serializer.to_entity(),
+                user_data_schema=schema,
             )
 
             return Response(
