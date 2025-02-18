@@ -1,9 +1,11 @@
-import logging
 from dataclasses import (
     dataclass,
     field,
 )
-from typing import Any
+from typing import (
+    Any,
+    List,
+)
 
 from core.apps.common.exception import ServiceException
 from core.apps.restaurant.exceptions.base import BaseExceptionRestaurant
@@ -172,26 +174,27 @@ class GetRestaurantMenuUseCase:
     def execute(
         self,
         data_user_and_weekday: GetRestaurantMenuUseCaseSchema,
-    ) -> GetRestaurantMenuUseCaseSchema:
-        if data_user_and_weekday.user.role == "Працівник":
+    ) -> List[Any]:
+        if data_user_and_weekday.user.role == "worker":
             employy = self.query_filter_employees_service.get_employy(
                 user=data_user_and_weekday.user,
             )
-            logging.info(f"{employy.restaurant}!!!!!!!!!!!!!!!!!!!!!")
             restaurant_menu = (
                 self.query_filter_restaurant_menu_service.filter_restaurant_menu(
-                    restaurant=employy[0].restaurant,
+                    restaurant=employy.restaurant,
                 )
             )
+
         elif data_user_and_weekday.user.role == "Власник":
             restaurant = self.query_filter_restaurant_service.filter_restaurant_owners(
                 user=data_user_and_weekday.user,
             )
             restaurant_menu = (
                 self.query_filter_restaurant_menu_service.filter_restaurant_menu(
-                    restaurant=restaurant,
+                    restaurant=restaurant[0],
                 )
             )
+
         updated_restaurant_menu = list(restaurant_menu)
 
         filtered_restaurant_menu = self.filter_results_restaurant_menu(
@@ -199,12 +202,10 @@ class GetRestaurantMenuUseCase:
             weekday=data_user_and_weekday.weekday,
         )
 
-        logging.info(f"{filtered_restaurant_menu}!!!!!!!!!!!!!!!!!!!!!")
-
         return filtered_restaurant_menu[0]
 
     @staticmethod
-    def filter_results_restaurant_menu(restaurant_menu, weekday):
+    def filter_results_restaurant_menu(restaurant_menu: List, weekday: str):
         filtered_weekday = [e for e in restaurant_menu if e.weekday == weekday]
 
         return filtered_weekday

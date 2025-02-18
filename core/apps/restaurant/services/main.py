@@ -60,7 +60,7 @@ class QueryRestaurantMenuService(BaseQueryRestaurantMenuService):
         restaurant: Restaurant,
     ):
         res = RestaurantMenu.objects.filter(
-            restaurant=restaurant[0],
+            restaurant=restaurant,
         )
 
         return res

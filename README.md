@@ -1,8 +1,13 @@
 # Django DRF Project
 
+Test project with functionality: jwt authorization, registration, creating restaurant, creating restaurant staff, creating menu for restaurant, getting menub of current day
+
 ### Installation and Running
 
 These instructions will help you run the project.
+
+![API](images/api's.png)
+![API](images/schemas.png)
 
 ## Requirements
 
@@ -28,7 +33,7 @@ ___
 * `make app` - up application and database/infrastructure, with replication database
 * `make app-logs` - follow the logs in app container
 * `make app-down` - down application and all infrastructure
-* `make collectstatic` - collect all static files
+* `make collectstatic` - collect all static files, for example: django admin panel
 * `make migrate` - apply all made migrations
 * `make createsuperuser` - run command createsuperuser
 
@@ -51,7 +56,6 @@ ___
 + **Factory Method**
 + **Repository**
 + **Dependency Injection**: (punq)
-+ **Specification Pattern**
 + **Configuration Management** (dotenv)
 + **CQRS**
 
