@@ -106,6 +106,3 @@ sections=[
     "FIRSTPARTY",
     "LOCALFOLDER",
 ]
-
-[tool.ruff.lint]
-ignore = ["F811"]
