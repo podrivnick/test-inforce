@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 
 from core.apps.common.dependencies.user_model import User
@@ -27,6 +28,9 @@ class CommandUserService(BaseCommandUserService):
         self,
         user_data: RegistrationUserUseCaseSchema | CreationEmployyUseCaseSchema,
     ):
+        logging.info(
+            f"{user_data["role"]}&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+        )
         user = User.objects.create_user(
             username=user_data["username"],
             password=user_data["password"],

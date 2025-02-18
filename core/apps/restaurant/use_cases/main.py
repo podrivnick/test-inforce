@@ -97,12 +97,13 @@ class CreationRestaurantMenuUseCase:
 
 @dataclass(eq=False)
 class CreationEmployyUseCaseSchema:
+    role: str | None = field(default=None)
     first_name: str | None = field(default=None)
     last_name: str | None = field(default=None)
     username: str | None = field(default=None)
     password: str | None = field(default=None)
     restaurant: str | None = field(default=None)
-    role: str | None = field(default=None)
+    work_role: str | None = field(default=None)
 
 
 @dataclass(eq=False)
@@ -144,10 +145,48 @@ class CreationEmployyUseCase:
             self.command_creation_employy_service.create_employy(
                 user=user,
                 restaurant=restaurant,
-                role=data_user_employy["role"],
+                role=data_user_employy["work_role"],
             )
         except BaseExceptionRestaurant as error:
             print(error.message)
             raise ServiceException()
 
         return data_user_employy
+
+
+@dataclass(eq=False)
+class GetRestaurantMenuUseCaseSchema:
+    restaurant: str | None = field(default=None)
+    weekday: str | None = field(default=None)
+    morning: str | None = field(default=None)
+    afternoon: str | None = field(default=None)
+    evening: str | None = field(default=None)
+
+
+@dataclass(eq=False)
+class GetRestaurantMenuUseCase:
+    query_filter_restaurant_service: BaseQueryRestaurantService
+    command_creation_restaurant_menu_service: BaseCommandRestaurantMenuService
+
+    def execute(
+        self,
+        restaurant_menu_data_schema: GetRestaurantMenuUseCaseSchema,
+    ) -> GetRestaurantMenuUseCaseSchema:
+        is_restaurant_already_exist = self.query_filter_restaurant_service.get(
+            title=restaurant_menu_data_schema["restaurant"],
+        )
+        if not is_restaurant_already_exist:
+            raise ValueError()
+
+        restaurant = list(is_restaurant_already_exist)
+
+        try:
+            self.command_creation_restaurant_menu_service.creation_restaurant_menu(
+                restaurant_data=restaurant_menu_data_schema,
+                restaurant=restaurant,
+            )
+        except BaseExceptionRestaurant as error:
+            print(error.message)
+            raise ServiceException()
+
+        return restaurant_menu_data_schema

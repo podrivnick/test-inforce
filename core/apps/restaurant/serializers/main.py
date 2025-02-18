@@ -56,5 +56,15 @@ class CreateEmployeeSerializer(serializers.Serializer):
             "username": self.validated_data.get("username"),
             "password": self.validated_data.get("password"),
             "restaurant": self.validated_data.get("restaurant"),
-            "role": self.validated_data.get("role"),
+            "work_role": self.validated_data.get("role"),
+            "role": "worker",
         }
+
+
+# class CreateEmployeeSerializer(serializers.Serializer):
+#     restaurant = serializers.CharField(write_only=True)
+
+#     def to_entity(self) -> Dict:
+#         return {
+#             "restaurant": self.validated_data.get("restaurant"),
+#         }
