@@ -3,4 +3,4 @@
 - ✔ Uploading menu for restaurant (There should be a menu for each day)
 - ✔ Creating employee
 - ✔ Getting current day menu
-- ✖ Getting results for the current day
+- ✔ Getting results for the current day

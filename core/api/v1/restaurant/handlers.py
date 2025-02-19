@@ -29,6 +29,8 @@ from core.apps.restaurant.use_cases.main import (
     CreationRestaurantUserUseCaseSchema,
     GetRestaurantMenuUseCase,
     GetRestaurantMenuUseCaseSchema,
+    GetRestaurantStatisticsUseCase,
+    GetRestaurantStatisticsUseCaseSchema,
 )
 from core.apps.restaurant.utils.main import IsOwner
 from core.infrastructure.di.main import get_container
@@ -179,6 +181,57 @@ class CurrentDayMenuAPI(generics.GenericAPIView):
                     "afternoon": result.afternoon,
                     "evening": result.evening,
                 },
+                status=status.HTTP_201_CREATED,
+            )
+        except ServiceException as error:
+            logger: Logger = container.resolve(Logger)
+            logger.error(
+                msg="Error: Can't Create Restaurant",
+                extra={"error_meta": orjson.dumps(error).decode()},
+            )
+
+            raise CustomExceptionForApps(
+                detail=error.message,
+                status_code=422,
+                extra_data={"some_field": "some_value"},
+            )
+
+
+class CurrentDayStatisticsAPI(generics.GenericAPIView):
+    serializer_class = CurrentDayMenuSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs) -> Response:
+        container = get_container()
+        use_case: GetRestaurantStatisticsUseCase = container.resolve(
+            GetRestaurantStatisticsUseCase,
+        )
+
+        user = request.user
+        weekday = datetime.today().strftime("%Y-%m-%d")
+
+        schema = GetRestaurantStatisticsUseCaseSchema(
+            user=user,
+            weekday=weekday,
+        )
+
+        try:
+            result = use_case.execute(
+                data_user_and_weekday=schema,
+            )
+
+            return Response(
+                [
+                    {
+                        "restaurant": stat.restaurant.title,
+                        "weekday": stat.menu.weekday,
+                        "morning": stat.menu.morning,
+                        "afternoon": stat.menu.afternoon,
+                        "evening": stat.menu.evening,
+                        "viewed_at": stat.viewed_at,
+                    }
+                    for stat in result
+                ],
                 status=status.HTTP_201_CREATED,
             )
         except ServiceException as error:

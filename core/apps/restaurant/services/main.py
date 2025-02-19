@@ -3,13 +3,16 @@ from dataclasses import dataclass
 from core.apps.common.dependencies.user_model import User
 from core.apps.restaurant.models.restaurant import (
     Employee,
+    MenuView,
     Restaurant,
     RestaurantMenu,
 )
 from core.apps.restaurant.services.base import (
+    BaseCommandMenuViewService,
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
     BaseCommandUploadEmployyService,
+    BaseQueryMenuViewService,
     BaseQueryRestaurantMenuService,
     BaseQueryRestaurantService,
     BaseQueryUploadEmployyService,
@@ -107,4 +110,34 @@ class CommandUploadEmployyService(BaseCommandUploadEmployyService):
             user=user,
             restaurant=restaurant[0],
             role=role,
+        )
+
+
+@dataclass(eq=False)
+class QueryMenuViewService(BaseQueryMenuViewService):
+    def filter_menu_views_by_restaurant(
+        self,
+        restaurant: Restaurant,
+        weekday: str,
+    ):
+        menu_statistics = MenuView.objects.filter(
+            restaurant=restaurant,
+            viewed_at__date=weekday,
+        )
+
+        return menu_statistics
+
+
+@dataclass(eq=False)
+class CommandMenuViewService(BaseCommandMenuViewService):
+    def create_viewed_menu(
+        self,
+        restaurant: Restaurant,
+        user: User,
+        menu: RestaurantMenu,
+    ):
+        MenuView.objects.create(
+            restaurant=restaurant,
+            menu=menu,
+            user=user,
         )

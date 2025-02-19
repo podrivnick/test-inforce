@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from core.apps.restaurant.models.restaurant import (
     Employee,
+    MenuView,
     Restaurant,
     RestaurantMenu,
 )
@@ -93,6 +94,14 @@ class EmployeeAdmin(admin.ModelAdmin):
     )
 
 
+class MenuViewAdmin(admin.ModelAdmin):
+    list_display = ("restaurant", "menu", "user", "viewed_at")
+    list_filter = ("restaurant", "menu", "viewed_at")
+    search_fields = ("restaurant__title", "menu__weekday", "user__username")
+    ordering = ("-viewed_at",)
+
+
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(RestaurantMenu, RestaurantMenuAdmin)
 admin.site.register(Employee, EmployeeAdmin)
+admin.site.register(MenuView, MenuViewAdmin)

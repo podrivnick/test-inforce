@@ -37,6 +37,10 @@ appbash:
 runtest:
 	${EXEC} ${APP_CONTAINER} pytest
 
+.PHONY: makemigrations
+makemigrations:
+	${EXEC} ${APP_CONTAINER} python manage.py makemigrations
+
 .PHONY: migrate
 migrate:
 	${EXEC} ${APP_CONTAINER} python manage.py migrate

@@ -49,3 +49,17 @@ class BaseCommandUploadEmployyService(ABC):
     @abstractmethod
     def create_employy(self):
         raise NotImplementedError()
+
+
+@dataclass(eq=False)
+class BaseCommandMenuViewService(ABC):
+    @abstractmethod
+    def create_viewed_menu(self):
+        raise NotImplementedError()
+
+
+@dataclass(eq=False)
+class BaseQueryMenuViewService(ABC):
+    @abstractmethod
+    def filter_menu_views_by_restaurant(self):
+        raise NotImplementedError()

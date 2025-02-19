@@ -10,16 +10,16 @@ from typing import (
 from core.apps.common.exception import ServiceException
 from core.apps.restaurant.exceptions.base import BaseExceptionRestaurant
 from core.apps.restaurant.exceptions.main import RestaurantAlreadyExists
-from core.apps.restaurant.models.restaurant import MenuView
 from core.apps.restaurant.services.base import (
+    BaseCommandMenuViewService,
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
     BaseCommandUploadEmployyService,
+    BaseQueryMenuViewService,
     BaseQueryRestaurantMenuService,
     BaseQueryRestaurantService,
     BaseQueryUploadEmployyService,
 )
-from core.apps.users.excaptions.base import BaseExceptionUser
 from core.apps.users.excaptions.main import UserAlreadyExists
 from core.apps.users.services.base import (
     BaseCommandUserService,
@@ -143,7 +143,7 @@ class CreationEmployyUseCase:
             user = self.command_register_user_service.registration_user(
                 user_data=data_user_employy,
             )
-        except BaseExceptionUser as error:
+        except BaseExceptionRestaurant as error:
             print(error.message)
             raise ServiceException()
 
@@ -171,6 +171,7 @@ class GetRestaurantMenuUseCase:
     query_filter_employees_service: BaseQueryUploadEmployyService
     query_filter_restaurant_menu_service: BaseQueryRestaurantMenuService
     query_filter_restaurant_service: BaseQueryRestaurantService
+    command_create_viewed_menu: BaseCommandMenuViewService
 
     def execute(
         self,
@@ -204,12 +205,15 @@ class GetRestaurantMenuUseCase:
         )
         menu = filtered_restaurant_menu[0]
 
-        # TODO: to command service
-        MenuView.objects.create(
-            restaurant=restaurant,
-            menu=menu,
-            user=user,
-        )
+        try:
+            self.command_create_viewed_menu.create_viewed_menu(
+                restaurant=restaurant,
+                menu=menu,
+                user=user,
+            )
+        except BaseExceptionRestaurant as error:
+            print(error.message)
+            raise ServiceException()
 
         return menu
 
@@ -218,3 +222,42 @@ class GetRestaurantMenuUseCase:
         filtered_weekday = [e for e in restaurant_menu if e.weekday == weekday]
 
         return filtered_weekday
+
+
+@dataclass(eq=False)
+class GetRestaurantStatisticsUseCaseSchema:
+    user: Any | None = field(default=None)
+    weekday: str | None = field(default=None)
+
+
+@dataclass(eq=False)
+class GetRestaurantStatisticsUseCase:
+    query_filter_employees_service: BaseQueryUploadEmployyService
+    query_filter_restaurant_service: BaseQueryRestaurantService
+    query_filter_restaurant_menu_views_service: BaseQueryMenuViewService
+
+    def execute(
+        self,
+        data_user_and_weekday: GetRestaurantStatisticsUseCaseSchema,
+    ) -> List[Any]:
+        user = data_user_and_weekday.user
+
+        if user.role == "worker":
+            employy = self.query_filter_employees_service.get_employy(
+                user=user,
+            )
+            restaurant = employy.restaurant
+        elif user.role == "Власник":
+            restaurant = self.query_filter_restaurant_service.filter_restaurant_owners(
+                user=user,
+            )[0]
+        else:
+            raise Exception("Not Known Role")
+
+        restaurant_menu_statistics = self.query_filter_restaurant_menu_views_service.filter_menu_views_by_restaurant(
+            restaurant=restaurant,
+            weekday=data_user_and_weekday.weekday,
+        )
+        restaurant_menu_statistics_listed = list(restaurant_menu_statistics)
+
+        return restaurant_menu_statistics_listed

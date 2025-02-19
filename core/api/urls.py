@@ -8,6 +8,7 @@ from drf_spectacular.views import (
 from core.api.v1.restaurant.handlers import (
     CreateEmployeeAPI,
     CurrentDayMenuAPI,
+    CurrentDayStatisticsAPI,
     RestauranCreationAPI,
     RestauranUploadMenuAPI,
 )
@@ -34,8 +35,13 @@ urlpatterns = [
         name="create-employy",
     ),
     path(
-        "get_cuurent_day_menu/",
+        "get_current_day_menu/",
         CurrentDayMenuAPI.as_view(),
+        name="current-menu",
+    ),
+    path(
+        "get_current_day_statistics/",
+        CurrentDayStatisticsAPI.as_view(),
         name="current-menu",
     ),
 ]
