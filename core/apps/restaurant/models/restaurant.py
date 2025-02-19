@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from core.apps.common.models import TimeBaseModel
 from core.apps.users.models.user import User
@@ -37,6 +38,39 @@ class RestaurantMenu(TimeBaseModel):
         db_table = "menu"
         verbose_name = "Меню"
         verbose_name_plural = "Меню"
+
+
+class MenuView(models.Model):
+    restaurant = models.ForeignKey(
+        to=Restaurant,
+        on_delete=models.CASCADE,
+        verbose_name="Ресторан",
+    )
+    menu = models.ForeignKey(
+        to=RestaurantMenu,
+        on_delete=models.CASCADE,
+        verbose_name="Меню",
+    )
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Користувач",
+    )
+    viewed_at = models.DateTimeField(
+        default=timezone.now,
+        verbose_name="Дата перегляду",
+    )
+
+    class Meta:
+        verbose_name = "Перегляд меню"
+        verbose_name_plural = "Перегляди меню"
+
+    def __str__(self):
+        return (
+            f"{self.restaurant.title} - {self.menu.weekday} viewed at {self.viewed_at}"
+        )
 
 
 class Employee(TimeBaseModel):

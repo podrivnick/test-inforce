@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework import routers
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -14,8 +13,6 @@ from core.api.v1.restaurant.handlers import (
 )
 from core.api.v1.users.handlers import UserRegistrationAPI
 
-
-router = routers.SimpleRouter()
 
 urlpatterns = [
     path("registration/", UserRegistrationAPI.as_view(), name="user-registration"),

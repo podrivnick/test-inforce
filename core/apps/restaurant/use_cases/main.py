@@ -10,6 +10,7 @@ from typing import (
 from core.apps.common.exception import ServiceException
 from core.apps.restaurant.exceptions.base import BaseExceptionRestaurant
 from core.apps.restaurant.exceptions.main import RestaurantAlreadyExists
+from core.apps.restaurant.models.restaurant import MenuView
 from core.apps.restaurant.services.base import (
     BaseCommandRestaurantMenuService,
     BaseCommandRestaurantService,
@@ -175,34 +176,42 @@ class GetRestaurantMenuUseCase:
         self,
         data_user_and_weekday: GetRestaurantMenuUseCaseSchema,
     ) -> List[Any]:
-        if data_user_and_weekday.user.role == "worker":
+        user = data_user_and_weekday.user
+
+        if user.role == "worker":
             employy = self.query_filter_employees_service.get_employy(
-                user=data_user_and_weekday.user,
+                user=user,
             )
-            restaurant_menu = (
-                self.query_filter_restaurant_menu_service.filter_restaurant_menu(
-                    restaurant=employy.restaurant,
-                )
-            )
-
-        elif data_user_and_weekday.user.role == "Власник":
+            restaurant = employy.restaurant
+        elif user.role == "Власник":
             restaurant = self.query_filter_restaurant_service.filter_restaurant_owners(
-                user=data_user_and_weekday.user,
-            )
-            restaurant_menu = (
-                self.query_filter_restaurant_menu_service.filter_restaurant_menu(
-                    restaurant=restaurant[0],
-                )
-            )
+                user=user,
+            )[0]
+        else:
+            raise Exception("Not Known Role")
 
+        restaurant_menu = (
+            self.query_filter_restaurant_menu_service.filter_restaurant_menu(
+                restaurant=restaurant,
+            )
+        )
         updated_restaurant_menu = list(restaurant_menu)
 
+        # Filter by Weekday Restaurants Menu's
         filtered_restaurant_menu = self.filter_results_restaurant_menu(
             restaurant_menu=updated_restaurant_menu,
             weekday=data_user_and_weekday.weekday,
         )
+        menu = filtered_restaurant_menu[0]
 
-        return filtered_restaurant_menu[0]
+        # TODO: to command service
+        MenuView.objects.create(
+            restaurant=restaurant,
+            menu=menu,
+            user=user,
+        )
+
+        return menu
 
     @staticmethod
     def filter_results_restaurant_menu(restaurant_menu: List, weekday: str):
