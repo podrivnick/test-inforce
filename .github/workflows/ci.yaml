@@ -33,7 +33,7 @@ jobs:
 
     - name: Run Tests
       run: |
-          docker-compose -f docker_compose/app.yaml -f docker_compose/postgres.yaml exec app pytest
+          docker-compose -f docker_compose/app.yaml -f docker_compose/postgres.yaml exec inforce-app pytest
 
     - name: Stop services
       run: |

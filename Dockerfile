@@ -22,9 +22,9 @@ ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 FROM python:3.12.1-slim-bullseye as dev
 
 
-WORKDIR /inforce
+WORKDIR /test-inforce
 
-COPY --from=builder requirements.dev.txt /inforce
+COPY --from=builder requirements.dev.txt /test-inforce
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends python3-dev \
@@ -43,6 +43,6 @@ RUN pip install --upgrade --no-cache-dir pip==24.0 \
     && pip install --no-cache-dir -r requirements.dev.txt
 
 
-COPY . /inforce/
+COPY . /test-inforce/
 
 EXPOSE 8000

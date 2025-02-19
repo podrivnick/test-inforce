@@ -1,7 +1,7 @@
 services:
   inforce-app:
     build:
-      context: ../../inforce/
+      context: ../../test-inforce/
       dockerfile: Dockerfile
     container_name: inforce-app
     environment:
@@ -22,7 +22,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ..:/inforce/
+      - ..:/test-inforce/
     networks:
       - ppostgres.network
 
