@@ -34,6 +34,7 @@ ___
 * `make app-logs` - follow the logs in app container
 * `make app-down` - down application and all infrastructure
 * `make collectstatic` - collect all static files, for example: django admin panel
+* `make makemigrations` - creating migrations
 * `make migrate` - apply all made migrations
 * `make createsuperuser` - run command createsuperuser
 
